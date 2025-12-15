@@ -6,40 +6,55 @@ export function getSMTPConfig(provider, email, appPassword) {
     const p = provider.toLowerCase();
 
     if (p === "gmail") {
-        // Gmail SMTP (explicit host/port helps in restricted/cloud networks)
+        if (appPassword.trim().length !== 16) {
+            throw new Error("Invalid Gmail App Password (must be 16 characters)");
+        }
+
         return {
             host: "smtp.gmail.com",
-            port: 465,
-            secure: true,
-            auth: { user: email, pass: appPassword },
-            connectionTimeout: 10000,
-            greetingTimeout: 5000,
-            tls: { rejectUnauthorized: false }
+            port: 587,
+            secure: false,
+            auth: {
+                user: email.trim(),
+                pass: appPassword.trim(),
+            },
         };
     }
 
     if (p === "zoho") {
-        // Zoho SMTP
         return {
             host: "smtp.zoho.com",
             port: 465,
             secure: true,
-            auth: { user: email, pass: appPassword }
+            auth: {
+                user: email.trim(),
+                pass: appPassword.trim(),
+            },
         };
     }
 
     if (p === "outlook") {
-        // Office365 / Outlook
         return {
             host: "smtp.office365.com",
             port: 587,
             secure: false,
-            auth: { user: email, pass: appPassword }
+            auth: {
+                user: email.trim(),
+                pass: appPassword.trim(),
+            },
         };
     }
 
     if (p === "yahoo") {
-        return { service: "yahoo", auth: { user: email, pass: appPassword } };
+        return {
+            host: "smtp.mail.yahoo.com",
+            port: 465,
+            secure: true,
+            auth: {
+                user: email.trim(),
+                pass: appPassword.trim(),
+            },
+        };
     }
 
     throw new Error("Unsupported provider. Supported: gmail, zoho, outlook, yahoo");
