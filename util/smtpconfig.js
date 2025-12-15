@@ -6,8 +6,16 @@ export function getSMTPConfig(provider, email, appPassword) {
     const p = provider.toLowerCase();
 
     if (p === "gmail") {
-        // Gmail via service
-        return { service: "gmail", auth: { user: email, pass: appPassword } };
+        // Gmail SMTP (explicit host/port helps in restricted/cloud networks)
+        return {
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth: { user: email, pass: appPassword },
+            connectionTimeout: 10000,
+            greetingTimeout: 5000,
+            tls: { rejectUnauthorized: false }
+        };
     }
 
     if (p === "zoho") {
