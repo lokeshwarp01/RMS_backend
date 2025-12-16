@@ -6,10 +6,6 @@ export function getSMTPConfig(provider, email, appPassword) {
     const p = provider.toLowerCase();
 
     if (p === "gmail") {
-        if (appPassword.trim().length !== 16) {
-            throw new Error("Invalid Gmail App Password (must be 16 characters)");
-        }
-
         return {
             host: "smtp.gmail.com",
             port: 587,
